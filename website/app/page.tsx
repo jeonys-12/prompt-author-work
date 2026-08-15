@@ -195,7 +195,7 @@ export default function Home() {
         <div className="hero-grid">
           <div>
             <p className="eyebrow">PROMPT AS A CONTRACT</p>
-            <h1>좋은 결과는<br /><em>좋은 조건</em>에서<br />시작됩니다.</h1>
+            <h1>좋은 결과는 <em>좋은 조건</em>에서 시작됩니다.</h1>
             <p className="lede">Prompt Author는 막연한 요청을 목표·제약·검증이 담긴 바로 쓸 수 있는 프롬프트로 바꿉니다.</p>
             <a className="primary" href="#paths">두 가지 방법 보기 <span>→</span></a>
           </div>
