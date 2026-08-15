@@ -25,6 +25,8 @@ test("server-renders the Prompt Author learning page", async () => {
   assert.match(html, /좋은 결과는/);
   assert.match(html, /상황별 프롬프트 제공 방식|MODE SELECTOR/);
   assert.match(html, /TRY IT YOURSELF/);
+  assert.match(html, /aria-label="주요 메뉴"/);
+  for (const anchor of ["paths", "modes", "how", "practice"]) assert.match(html, new RegExp(`href="#${anchor}"`));
   assert.match(html, /02 \/ MODE SELECTOR/);
   assert.match(html, /03 \/ HOW IT WORKS/);
   assert.match(html, /04 \/ TRY IT YOURSELF/);
@@ -128,6 +130,14 @@ test("ships the interactive practice tool without starter preview code", async (
   assert.match(page, /onClick=\{\(\) => selectPracticeMode\(key\)\}/);
   assert.doesNotMatch(page, /const \[mode, setMode\]/);
   assert.match(page, /href="#workbench"/);
+  assert.match(page, /className="site-nav"/);
+  assert.match(page, /className="nav-links"/);
+  assert.match(page, /id="how"/);
+  for (const anchor of ["paths", "modes", "how", "practice"]) assert.match(page, new RegExp(`href="#${anchor}"`));
+  assert.match(css, /\.site-nav\s*\{[^}]*position:\s*fixed[^}]*z-index:\s*1000/s);
+  assert.match(css, /scroll-padding-top:\s*72px/);
+  assert.match(css, /section\[id\]\s*\{[^}]*scroll-margin-top:\s*72px/);
+  assert.match(css, /\.nav-links\s*\{[^}]*overflow-x:\s*auto/s);
   assert.match(page, /function cancelSmoothScroll\(\)/);
   assert.match(page, /addEventListener\("wheel", cancelSmoothScroll/);
   assert.match(page, /addEventListener\("touchstart", cancelSmoothScroll/);
