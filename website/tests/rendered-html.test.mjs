@@ -140,6 +140,8 @@ test("ships the interactive practice tool without starter preview code", async (
   assert.doesNotMatch(page, /SkeletonPreview|codex-preview/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
   assert.match(css, /overflow-y:\s*auto/);
+  assert.match(css, /h1\s*\{[^}]*white-space:\s*nowrap/);
+  assert.match(css, /@media\s*\(max-width:\s*900px\)[^{]*\{[\s\S]*?h1\s*\{[^}]*white-space:\s*normal/);
   assert.match(css, /\.web-path\s*\{[^}]*background:\s*var\(--deep\)[^}]*color:\s*var\(--white\)/);
   assert.match(css, /\.skill-path\s*\{[^}]*background:\s*var\(--white\)[^}]*color:\s*var\(--ink\)/);
   assert.doesNotMatch(css, /\.practice[^}]*overflow-y:\s*auto/);
