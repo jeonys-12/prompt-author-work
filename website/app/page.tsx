@@ -191,7 +191,17 @@ export default function Home() {
   return (
     <main>
       <section className="hero" id="top">
-        <nav><a className="brand" href="#top">prompt<span>author</span></a><a href="#paths">사용 방법 <span aria-hidden>↘</span></a></nav>
+        <nav className="site-nav" aria-label="주요 메뉴">
+          <div className="nav-inner">
+            <a className="brand" href="#top">prompt<span>author</span></a>
+            <div className="nav-links">
+              <a href="#paths">사용 방법</a>
+              <a href="#modes">상황별 가이드</a>
+              <a href="#how">작동 방식</a>
+              <a href="#practice">직접 만들기</a>
+            </div>
+          </div>
+        </nav>
         <div className="hero-grid">
           <div>
             <p className="eyebrow">PROMPT AS A CONTRACT</p>
@@ -226,7 +236,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section how">
+      <section className="section how" id="how">
         <p className="section-kicker">03 / HOW IT WORKS</p>
         <h2>요청을 받으면 이렇게 <em>작동</em>합니다.</h2>
         <div className="flow">{flow.map((item, index) => <div key={item}><span>0{index + 1}</span><h3>{item}</h3><p>{index === 0 ? "요청 유형을 고릅니다." : index === 1 ? "결과를 바꾸는 정보만 확인합니다." : index === 2 ? "필요한 섹션만 조합합니다." : "형식과 사실성을 점검합니다."}</p></div>)}</div>
