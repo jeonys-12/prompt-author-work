@@ -42,7 +42,7 @@ section[id] { scroll-margin-top: 72px; }
 }
 
 .hero {
-  min-height: 430px;
+  min-height: 370px;
   padding: 60px clamp(20px, 4vw, 64px) 28px;
   color: var(--white);
   background: var(--deep);
@@ -78,7 +78,7 @@ section[id] { scroll-margin-top: 72px; }
   white-space: nowrap;
 }
 .nav-links a:hover, .nav-links a:focus-visible { background: rgba(255, 255, 255, 0.08); color: var(--white); }
-.hero-grid { max-width: var(--content); min-height: 342px; margin: auto; display: flex; align-items: center; }
+.hero-grid { max-width: var(--content); min-height: 282px; margin: auto; display: flex; align-items: center; }
 .hero-grid > div { width: 100%; }
 .eyebrow { margin-bottom: 12px; color: var(--accent-light); }
 h1 { max-width: none; margin-bottom: 14px; font-size: clamp(32px, 4vw, 58px); line-height: 1.1; white-space: nowrap; }
@@ -281,14 +281,14 @@ footer p { margin: 0; color: rgba(255, 255, 255, 0.62); font-size: 12px; }
 @media (max-width: 560px) {
   html { scroll-padding-top: 64px; }
   section[id] { scroll-margin-top: 64px; }
-  .hero { min-height: 370px; padding-top: 56px; }
+  .hero { min-height: 340px; padding-top: 56px; }
   .site-nav { height: 56px; }
   .nav-inner { gap: 12px; padding-right: 12px; }
   .brand { flex: 0 0 auto; font-size: 18px; }
   .nav-links { min-width: 0; overflow-x: auto; justify-content: flex-start; scrollbar-width: none; }
   .nav-links::-webkit-scrollbar { display: none; }
   .nav-links a { padding: 6px 8px; font-size: 11px; }
-  .hero-grid { min-height: 286px; }
+  .hero-grid { min-height: 256px; }
   h1 { font-size: clamp(34px, 10vw, 44px); }
   .lede { font-size: 14px; }
   .section { padding-top: 32px; padding-bottom: 32px; }
