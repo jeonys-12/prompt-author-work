@@ -25,6 +25,11 @@ test("server-renders the Prompt Author learning page", async () => {
   assert.match(html, /좋은 결과는/);
   assert.match(html, /상황별 프롬프트 제공 방식|MODE SELECTOR/);
   assert.match(html, /TRY IT YOURSELF/);
+  assert.match(html, /02 \/ MODE SELECTOR/);
+  assert.match(html, /03 \/ HOW IT WORKS/);
+  assert.match(html, /04 \/ TRY IT YOURSELF/);
+  assert.doesNotMatch(html, /02 \/ PRINCIPLES|조건이 다르면, 프롬프트의|모든 요청에 긴 지침이 필요한 것은 아닙니다/);
+  assert.doesNotMatch(html, /path-number/);
   assert.match(html, /YOUR PROMPT/);
   assert.match(html, /지속 작업·\/goal/);
   assert.match(html, /Codex·Claude Code에서 사용하기/);
