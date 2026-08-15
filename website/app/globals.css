@@ -96,10 +96,10 @@ h1 em, h2 em { color: var(--accent-light); font-style: normal; }
 .path-cards { margin-top: 18px; display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); }
 .path-card { min-height: 200px; padding: 20px; display: flex; flex-direction: column; }
 .path-card + .path-card { border-left: 1px solid var(--line); }
-.skill-path { background: var(--deep); color: var(--white); }
-.web-path { background: var(--white); color: var(--ink); }
-.path-card .mono { margin-bottom: 20px; color: var(--accent-light); }
-.web-path .mono { color: var(--accent); }
+.web-path { background: var(--deep); color: var(--white); }
+.skill-path { background: var(--white); color: var(--ink); }
+.path-card .mono { margin-bottom: 20px; color: var(--accent); }
+.web-path .mono { color: var(--accent-light); }
 .path-card h3 {
   max-width: 520px;
   margin-bottom: 10px;
