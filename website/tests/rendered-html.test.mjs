@@ -202,6 +202,15 @@ test("writes a static entry page for Vercel", async () => {
   await access(new URL("../dist/client/index.html", import.meta.url));
 });
 
+test("prepares repository-relative assets for GitHub Pages", async () => {
+  const html = await readFile(new URL("../dist/client/index.html", import.meta.url), "utf8");
+  if (process.env.GITHUB_PAGES !== "true") return;
+
+  assert.match(html, /\/prompt-author-work\/assets\//);
+  assert.doesNotMatch(html, /(?:href|src)="\/assets\//);
+  assert.doesNotMatch(html, /\/prompt-author-work\/prompt-author-work\//);
+});
+
 test("keeps the README, skill, patterns, and website terminology aligned", async () => {
   const [readme, skill, patterns, page] = await Promise.all([
     readFile(new URL("../../README.md", import.meta.url), "utf8"),
