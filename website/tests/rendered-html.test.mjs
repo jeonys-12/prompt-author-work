@@ -34,6 +34,7 @@ test("server-renders the Prompt Author learning page", async () => {
   assert.match(html, /지속 작업·\/goal/);
   assert.match(html, /Codex·Claude Code에서 사용하기/);
   assert.match(html, /ChatGPT·Codex·Claude/);
+  assert.ok(html.indexOf("웹에서 만들고 바로 붙여넣기") < html.indexOf("스킬을 내려받아 Codex·Claude Code에서 사용하기"));
   assert.match(html, /일반 대화·초안/);
   assert.match(html, /앱 개발 시작/);
   assert.match(html, /업무 자동화 시작/);
@@ -139,6 +140,8 @@ test("ships the interactive practice tool without starter preview code", async (
   assert.doesNotMatch(page, /SkeletonPreview|codex-preview/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
   assert.match(css, /overflow-y:\s*auto/);
+  assert.match(css, /\.web-path\s*\{[^}]*background:\s*var\(--deep\)[^}]*color:\s*var\(--white\)/);
+  assert.match(css, /\.skill-path\s*\{[^}]*background:\s*var\(--white\)[^}]*color:\s*var\(--ink\)/);
   assert.doesNotMatch(css, /\.practice[^}]*overflow-y:\s*auto/);
 });
 
