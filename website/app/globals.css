@@ -83,6 +83,7 @@ section[id] { scroll-margin-top: 72px; }
 .eyebrow { margin-bottom: 12px; color: var(--accent-light); }
 h1 { max-width: none; margin-bottom: 14px; font-size: clamp(32px, 4vw, 58px); line-height: 1.1; white-space: nowrap; }
 h1 em, h2 em { color: var(--accent-light); font-style: normal; }
+.ai-accent { color: var(--accent-light); }
 .lede { max-width: 680px; margin-bottom: 0; color: rgba(255, 255, 255, 0.76); font-size: 15px; }
 .primary {
   display: inline-flex;
