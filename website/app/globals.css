@@ -117,7 +117,13 @@ h1 em, h2 em { color: var(--accent-light); font-style: normal; }
   line-height: 1.14;
 }
 .paths-heading h2 em, .how h2 em, .practice h2 em { color: var(--accent); }
-.paths-heading > p:last-child { max-width: 660px; margin-bottom: 0; color: var(--muted); font-size: 15px; }
+.paths-heading > p:last-child {
+  max-width: none;
+  margin-bottom: 0;
+  color: var(--muted);
+  font-size: clamp(12px, 1.25vw, 15px);
+  white-space: nowrap;
+}
 
 .paths { background: var(--soft); }
 .path-cards, .mode-header, .mode-layout, .how, .practice-heading, .workbench {
@@ -261,6 +267,7 @@ footer p { margin: 0; color: rgba(255, 255, 255, 0.62); font-size: 12px; }
   h1 { white-space: normal; }
   .paths-heading, .mode-layout, .workbench, .path-cards { grid-template-columns: 1fr; }
   .paths-heading h2, .paths-heading > p:last-child { grid-column: 1; }
+  .paths-heading > p:last-child { white-space: normal; }
   .paths-heading .section-kicker { padding-top: 0; }
   .path-card + .path-card { border-top: 1px solid var(--line); border-left: 0; }
   .mode-list { border-right: 0; border-bottom: 1px solid var(--line-dark); }
