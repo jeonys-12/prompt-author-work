@@ -157,6 +157,8 @@ test("ships the interactive practice tool without starter preview code", async (
   assert.match(css, /h1\s*\{[^}]*white-space:\s*nowrap/);
   assert.match(css, /@media\s*\(max-width:\s*900px\)[^{]*\{[\s\S]*?h1\s*\{[^}]*white-space:\s*normal/);
   assert.match(css, /\.web-path\s*\{[^}]*background:\s*var\(--deep\)[^}]*color:\s*var\(--white\)/);
+  assert.match(css, /\.paths-heading > p:last-child\s*\{[^}]*max-width:\s*none[^}]*white-space:\s*nowrap/s);
+  assert.match(css, /@media\s*\(max-width:\s*900px\)[^{]*\{[\s\S]*?\.paths-heading > p:last-child\s*\{[^}]*white-space:\s*normal/);
   assert.match(css, /\.skill-path\s*\{[^}]*background:\s*var\(--white\)[^}]*color:\s*var\(--ink\)/);
   assert.doesNotMatch(css, /\.practice[^}]*overflow-y:\s*auto/);
 });
