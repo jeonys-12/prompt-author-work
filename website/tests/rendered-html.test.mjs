@@ -22,7 +22,7 @@ test("server-renders the Prompt Author learning page", async () => {
 
   const html = await response.text();
   assert.match(html, /<title>Prompt Author — 더 나은 조건, 더 나은 프롬프트<\/title>/);
-  assert.match(html, /AI 좋은 결과는 <em>좋은 조건<\/em>에서 시작됩니다\./);
+  assert.match(html, /AI, 좋은 결과는 <em>좋은 조건<\/em>에서 시작됩니다\./);
   assert.match(html, /상황별 프롬프트 제공 방식|MODE SELECTOR/);
   assert.match(html, /TRY IT YOURSELF/);
   assert.match(html, /aria-label="주요 메뉴"/);
@@ -130,7 +130,7 @@ test("ships the interactive practice tool without starter preview code", async (
   assert.match(page, /onClick=\{\(\) => selectPracticeMode\(key\)\}/);
   assert.doesNotMatch(page, /const \[mode, setMode\]/);
   assert.match(page, /href="#workbench"/);
-  assert.match(page, /<h1>AI 좋은 결과는 <em>좋은 조건<\/em>에서 시작됩니다\.<\/h1>/);
+  assert.match(page, /<h1>AI, 좋은 결과는 <em>좋은 조건<\/em>에서 시작됩니다\.<\/h1>/);
   assert.match(page, /className="site-nav"/);
   assert.match(page, /className="nav-links"/);
   assert.match(page, /id="how"/);
