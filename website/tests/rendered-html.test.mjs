@@ -39,7 +39,7 @@ test("server-renders the Prompt Author learning page", async () => {
   assert.ok(html.indexOf("웹에서 만들고 바로 붙여넣기") < html.indexOf("스킬을 내려받아 Codex·Claude Code에서 사용하기"));
   assert.match(html, /지금 한 번의 프롬프트가 필요하면 웹에서 바로 생성하고, 반복해서 프롬프트를 만들면 스킬을 설치하여 사용하세요\./);
   assert.doesNotMatch(html, /반복해서 프롬프트를 만들면 스킬을 설치하고, 지금 한 번의 프롬프트가 필요하면 웹에서 바로 생성하세요\./);
-  assert.match(html, /일반 대화·초안/);
+  assert.match(html, /일반 질문·보고 초안/);
   assert.match(html, /앱 개발 시작/);
   assert.match(html, /업무 자동화 시작/);
   assert.match(html, /기존 프롬프트 개선/);
@@ -63,7 +63,7 @@ test("ships the interactive practice tool without starter preview code", async (
   assert.match(page, /values: \["2026년 한국 생성형 AI 시장 조사", "정부·기업 공식 자료를 우선", "출처를 포함한 사실·해석 구분 표"\]/);
   assert.match(page, /placeholders: \["무엇을 조사할까요\?", "어떤 출처를 사용할까요\?", "어떤 형식으로 정리할까요\?"\]/);
   assert.match(page, /setObjective\(practiceSelected\.values\[0\]\)/);
-  assert.match(page, /일반 대화·초안/);
+  assert.match(page, /일반 질문·보고 초안/);
   assert.match(page, /fields: \["작성 목표", "대상", "말투", "분량", "결과 형식"\]/);
   assert.match(page, /작성 목표: \$\{goal\}/);
   assert.match(page, /대상: \$\{who\}/);
@@ -277,7 +277,7 @@ test("keeps the README, skill, patterns, and website terminology aligned", async
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
   ]);
 
-  for (const label of ["일반 대화·초안", "앱 개발 시작", "업무 자동화 시작", "기존 프롬프트 개선"]) {
+  for (const label of ["일반 질문·보고 초안", "앱 개발 시작", "업무 자동화 시작", "기존 프롬프트 개선"]) {
     assert.match(readme, new RegExp(label));
     assert.match(page, new RegExp(label));
   }
