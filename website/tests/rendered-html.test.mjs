@@ -155,6 +155,10 @@ test("ships the interactive practice tool without starter preview code", async (
   assert.doesNotMatch(page, /SkeletonPreview|codex-preview/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
   assert.match(css, /overflow-y:\s*auto/);
+  assert.match(css, /\.hero\s*\{[^}]*min-height:\s*370px[^}]*padding:\s*60px/s);
+  assert.match(css, /\.hero-grid\s*\{[^}]*min-height:\s*282px/);
+  assert.match(css, /@media\s*\(max-width:\s*560px\)[^{]*\{[\s\S]*?\.hero\s*\{[^}]*min-height:\s*340px/);
+  assert.match(css, /@media\s*\(max-width:\s*560px\)[^{]*\{[\s\S]*?\.hero-grid\s*\{[^}]*min-height:\s*256px/);
   assert.match(css, /h1\s*\{[^}]*white-space:\s*nowrap/);
   assert.match(css, /@media\s*\(max-width:\s*900px\)[^{]*\{[\s\S]*?h1\s*\{[^}]*white-space:\s*normal/);
   assert.match(css, /\.web-path\s*\{[^}]*background:\s*var\(--deep\)[^}]*color:\s*var\(--white\)/);
