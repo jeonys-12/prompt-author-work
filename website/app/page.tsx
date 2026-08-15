@@ -199,14 +199,6 @@ export default function Home() {
             <p className="lede">Prompt Author는 막연한 요청을 목표·제약·검증이 담긴 바로 쓸 수 있는 프롬프트로 바꿉니다.</p>
             <a className="primary" href="#paths">두 가지 방법 보기 <span>→</span></a>
           </div>
-          <div className="hero-card">
-            <div className="card-top"><span className="pulse" /> LIVE PROMPT CHECK</div>
-            <p className="mono label">INPUT</p>
-            <p className="input-quote">“고객에게 감사 인사를 전하는 이메일을 써줘.”</p>
-            <div className="arrow">↓</div>
-            <p className="mono label">CONTRACT</p>
-            <div className="contract-lines"><span>목표</span><b>감사 이메일 작성</b><span>대상</span><b>기존 고객</b><span>형식</span><b>제목 + 150자 본문</b></div>
-          </div>
         </div>
       </section>
 
