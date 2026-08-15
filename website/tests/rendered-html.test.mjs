@@ -37,6 +37,8 @@ test("server-renders the Prompt Author learning page", async () => {
   assert.match(html, /Codex·Claude Code에서 사용하기/);
   assert.match(html, /ChatGPT·Codex·Claude/);
   assert.ok(html.indexOf("웹에서 만들고 바로 붙여넣기") < html.indexOf("스킬을 내려받아 Codex·Claude Code에서 사용하기"));
+  assert.match(html, /지금 한 번의 프롬프트가 필요하면 웹에서 바로 생성하고, 반복해서 프롬프트를 만들면 스킬을 설치하여 사용하세요\./);
+  assert.doesNotMatch(html, /반복해서 프롬프트를 만들면 스킬을 설치하고, 지금 한 번의 프롬프트가 필요하면 웹에서 바로 생성하세요\./);
   assert.match(html, /일반 대화·초안/);
   assert.match(html, /앱 개발 시작/);
   assert.match(html, /업무 자동화 시작/);
