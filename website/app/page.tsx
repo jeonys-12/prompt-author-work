@@ -7,7 +7,7 @@ type Mode = "casual" | "research" | "image" | "video" | "presentation" | "app" |
 
 const modes: Record<Mode, { label: string; short: string; rule: string; example: string; fields: string[]; placeholders: string[]; values: string[] }> = {
   casual: {
-    label: "일반 대화·초안",
+    label: "일반 질문·보고 초안",
     short: "대화 · 초안 · 아이디어",
     rule: "작성 목표·대상·말투·분량·결과 형식을 짧게 씁니다. 중요한 사실이나 판단을 검증해야 할 때만 근거·불확실성·가정과 사람의 최종 확인 항목을 추가합니다.",
     example: "기존 고객에게 서비스 이용에 감사하는 친근한 이메일을 150자 내외로 작성하세요. 제목 1개와 본문을 반환하세요.",
