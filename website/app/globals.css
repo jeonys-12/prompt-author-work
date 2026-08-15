@@ -69,23 +69,23 @@ h1 em, h2 em { color: var(--accent-light); font-style: normal; }
 
 .section { padding: clamp(36px, 4vw, 52px) clamp(20px, 4vw, 64px); }
 .section-kicker { color: var(--accent); }
-.intro, .paths-heading {
+.paths-heading {
   max-width: var(--content);
   margin: auto;
   display: grid;
   grid-template-columns: 160px 1fr;
   gap: 22px;
 }
-.intro .section-kicker, .paths-heading .section-kicker { padding-top: 8px; }
-.intro h2, .intro .section-copy, .paths-heading h2, .paths-heading > p:last-child { grid-column: 2; }
-.intro h2, .paths-heading h2, .how h2, .practice h2 {
+.paths-heading .section-kicker { padding-top: 8px; }
+.paths-heading h2, .paths-heading > p:last-child { grid-column: 2; }
+.paths-heading h2, .how h2, .practice h2 {
   max-width: 900px;
   margin-bottom: 10px;
   font-size: clamp(30px, 3.6vw, 44px);
   line-height: 1.14;
 }
-.intro h2 em, .paths-heading h2 em, .how h2 em, .practice h2 em { color: var(--accent); }
-.section-copy, .paths-heading > p:last-child { max-width: 660px; margin-bottom: 0; color: var(--muted); font-size: 15px; }
+.paths-heading h2 em, .how h2 em, .practice h2 em { color: var(--accent); }
+.paths-heading > p:last-child { max-width: 660px; margin-bottom: 0; color: var(--muted); font-size: 15px; }
 
 .paths { background: var(--soft); }
 .path-cards, .mode-header, .mode-layout, .how, .practice-heading, .workbench {
@@ -100,7 +100,6 @@ h1 em, h2 em { color: var(--accent-light); font-style: normal; }
 .web-path { background: var(--white); color: var(--ink); }
 .path-card .mono { margin-bottom: 20px; color: var(--accent-light); }
 .web-path .mono { color: var(--accent); }
-.path-number { display: none; }
 .path-card h3 {
   max-width: 520px;
   margin-bottom: 10px;
@@ -227,9 +226,9 @@ footer { padding: 18px clamp(20px, 4vw, 64px); background: #1d2023; color: var(-
 footer p { margin: 0; color: rgba(255, 255, 255, 0.62); font-size: 12px; }
 
 @media (max-width: 900px) {
-  .intro, .paths-heading, .mode-layout, .workbench, .path-cards { grid-template-columns: 1fr; }
-  .intro h2, .intro .section-copy, .paths-heading h2, .paths-heading > p:last-child { grid-column: 1; }
-  .intro .section-kicker, .paths-heading .section-kicker { padding-top: 0; }
+  .paths-heading, .mode-layout, .workbench, .path-cards { grid-template-columns: 1fr; }
+  .paths-heading h2, .paths-heading > p:last-child { grid-column: 1; }
+  .paths-heading .section-kicker { padding-top: 0; }
   .path-card + .path-card { border-top: 1px solid var(--line); border-left: 0; }
   .mode-list { border-right: 0; border-bottom: 1px solid var(--line-dark); }
   .mode-list button { grid-template-columns: 30px 1fr auto 16px; }
