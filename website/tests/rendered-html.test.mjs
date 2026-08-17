@@ -117,6 +117,15 @@ test("ships the interactive practice tool without starter preview code", async (
   assert.match(page, /onClick=\{\(\) => setGuideMode\(key\)\}/);
   assert.match(page, /String\(i \+ 1\)\.padStart\(2, "0"\)/);
   assert.match(page, /className="mode-choices"/);
+  assert.match(page, /function startWithGuideExample\(\)/);
+  assert.match(page, /setPracticeMode\(guideMode\)/);
+  assert.match(page, /setObjective\(selected\.values\[0\]\)/);
+  assert.match(page, /setAudience\(selected\.values\[1\]\)/);
+  assert.match(page, /setFormat\(selected\.values\[guideMode === "casual" \? 4 : 2\]\)/);
+  assert.match(page, /scrollIntoView\(\{ behavior: "smooth", block: "start" \}\)/);
+  assert.match(page, /className="example-start"/);
+  assert.match(page, /이 예시로 시작/);
+  assert.match(css, /\.example-start\s*\{/);
   assert.match(page, /function selectPracticeMode\(nextMode: Mode\)/);
   assert.match(page, /if \(nextMode === practiceMode\) return/);
   assert.match(page, /setObjective\(""\)/);
