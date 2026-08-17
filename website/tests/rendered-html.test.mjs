@@ -142,6 +142,11 @@ test("ships the interactive practice tool without starter preview code", async (
   assert.match(page, /const modeKeys = Object\.keys\(modes\) as Mode\[\]/);
   assert.match(page, /https:\/\/github\.com\/jeonys-12\/prompt-author-work/);
   assert.doesNotMatch(page, /const \[mode, setMode\]/);
+  assert.match(page, /className="path-actions"/);
+  assert.match(page, /href="#modes">요청 상황별 가이드/);
+  assert.match(page, /href="#workbench">웹에서 프롬프트 만들기/);
+  assert.ok(page.indexOf("요청 상황별 가이드") < page.indexOf("웹에서 프롬프트 만들기"));
+  assert.match(css, /\.path-actions\s*\{[^}]*display:\s*flex[^}]*gap:\s*24px[^}]*flex-wrap:\s*wrap/s);
   assert.match(page, /href="#workbench"/);
   assert.match(page, /<h1><span className="ai-accent">AI<\/span> 좋은 결과는 <em>좋은 조건<\/em>에서 시작됩니다\.<\/h1>/);
   assert.doesNotMatch(page, /<span className="ai-accent">AI<\/span>,/);
