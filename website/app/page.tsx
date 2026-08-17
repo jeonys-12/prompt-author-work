@@ -162,6 +162,21 @@ export default function Home() {
     setFormat(practiceSelected.values[practiceMode === "casual" ? 4 : 2]);
   }
 
+  function startWithGuideExample() {
+    setPracticeMode(guideMode);
+    setObjective(selected.values[0]);
+    setAudience(selected.values[1]);
+    setTone(guideMode === "casual" ? selected.values[2] : "");
+    setLength(guideMode === "casual" ? selected.values[3] : "");
+    setFormat(selected.values[guideMode === "casual" ? 4 : 2]);
+    setReferencePrompt("");
+    setDesignBrief("");
+    setNeedsVerification(false);
+    designReadId.current += 1;
+    setCopied(false);
+    window.requestAnimationFrame(() => document.getElementById("workbench")?.scrollIntoView({ behavior: "smooth", block: "start" }));
+  }
+
   function selectPracticeMode(nextMode: Mode) {
     if (nextMode === practiceMode) return;
     setPracticeMode(nextMode);
@@ -231,7 +246,7 @@ export default function Home() {
             <h3>{selected.label} 프롬프트의 원칙</h3>
             <p className="detail-rule">{selected.rule}</p>
             <div className="needs"><p className="mono label">INCLUDE</p>{selected.fields.map((field) => <span key={field}>✓ {field}</span>)}</div>
-            <div className="example"><p className="mono label">READY-TO-USE EXAMPLE</p><blockquote>{selected.example}</blockquote></div>
+            <div className="example"><p className="mono label">READY-TO-USE EXAMPLE</p><blockquote>{selected.example}</blockquote><button type="button" className="example-start" onClick={startWithGuideExample}>이 예시로 시작 <span>→</span></button></div>
           </article>
         </div>
       </section>
