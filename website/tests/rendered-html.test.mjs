@@ -62,7 +62,8 @@ test("ships the interactive practice tool without starter preview code", async (
   assert.match(page, /const modes/);
   assert.match(page, /values: \["2026년 한국 생성형 AI 시장 조사", "정부·기업 공식 자료를 우선", "출처를 포함한 사실·해석 구분 표"\]/);
   assert.match(page, /placeholders: \["무엇을 조사할까요\?", "어떤 출처를 사용할까요\?", "어떤 형식으로 정리할까요\?"\]/);
-  assert.match(page, /setObjective\(practiceSelected\.values\[0\]\)/);
+  assert.match(page, /function applyExample\(mode: Mode, config: ModeConfig\)/);
+  assert.match(page, /setObjective\(config\.values\[0\]\)/);
   assert.match(page, /일반 질문·보고 초안/);
   assert.match(page, /fields: \["작성 목표", "대상", "말투", "분량", "결과 형식"\]/);
   assert.match(page, /작성 목표: \$\{goal\}/);
@@ -110,7 +111,7 @@ test("ships the interactive practice tool without starter preview code", async (
   assert.match(page, /getdesign\.md/);
   assert.match(page, /YouMind/);
   assert.match(page, /readDesignFile/);
-  assert.match(page, /practiceMode === "presentation" \|\| practiceMode === "app"/);
+  assert.match(page, /const supportsDesignBrief = practiceMode === "presentation" \|\| practiceMode === "app"/);
   assert.match(page, /buildDesignReference\(designBrief, "앱 UI 설계"\)/);
   assert.match(page, /const \[guideMode, setGuideMode\] = useState<Mode>\("casual"\)/);
   assert.match(page, /const \[practiceMode, setPracticeMode\] = useState<Mode>\("casual"\)/);
@@ -119,9 +120,8 @@ test("ships the interactive practice tool without starter preview code", async (
   assert.match(page, /className="mode-choices"/);
   assert.match(page, /function startWithGuideExample\(\)/);
   assert.match(page, /setPracticeMode\(guideMode\)/);
-  assert.match(page, /setObjective\(selected\.values\[0\]\)/);
-  assert.match(page, /setAudience\(selected\.values\[1\]\)/);
-  assert.match(page, /setFormat\(selected\.values\[guideMode === "casual" \? 4 : 2\]\)/);
+  assert.match(page, /applyExample\(guideMode, selected\)/);
+  assert.match(page, /resetModeExtras\(\)/);
   assert.match(page, /scrollIntoView\(\{ behavior: "smooth", block: "start" \}\)/);
   assert.match(page, /className="example-start"/);
   assert.match(page, /이 예시로 시작/);
@@ -139,6 +139,8 @@ test("ships the interactive practice tool without starter preview code", async (
   assert.match(page, /const readId = \+\+designReadId\.current/);
   assert.match(page, /if \(readId !== designReadId\.current\) return/);
   assert.match(page, /onClick=\{\(\) => selectPracticeMode\(key\)\}/);
+  assert.match(page, /const modeKeys = Object\.keys\(modes\) as Mode\[\]/);
+  assert.match(page, /https:\/\/github\.com\/jeonys-12\/prompt-author-work/);
   assert.doesNotMatch(page, /const \[mode, setMode\]/);
   assert.match(page, /href="#workbench"/);
   assert.match(page, /<h1><span className="ai-accent">AI<\/span> 좋은 결과는 <em>좋은 조건<\/em>에서 시작됩니다\.<\/h1>/);
