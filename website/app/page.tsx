@@ -89,8 +89,6 @@ const modes: Record<Mode, { label: string; short: string; rule: string; example:
   },
 };
 
-const flow = ["요청 분류", "계약 수집", "프롬프트 작성", "검증·전달"];
-
 export default function Home() {
   const [guideMode, setGuideMode] = useState<Mode>("casual");
   const [practiceMode, setPracticeMode] = useState<Mode>("casual");
@@ -212,7 +210,6 @@ export default function Home() {
             <div className="nav-links">
               <a href="#paths">사용 방법</a>
               <a href="#modes">상황별 가이드</a>
-              <a href="#how">작동 방식</a>
               <a href="#practice">직접 만들기</a>
             </div>
           </div>
@@ -251,15 +248,9 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section how" id="how">
-        <p className="section-kicker">03 / HOW IT WORKS</p>
-        <h2>요청을 받으면 이렇게 <em>작동</em>합니다.</h2>
-        <div className="flow">{flow.map((item, index) => <div key={item}><span>0{index + 1}</span><h3>{item}</h3><p>{index === 0 ? "요청 유형을 고릅니다." : index === 1 ? "결과를 바꾸는 정보만 확인합니다." : index === 2 ? "필요한 섹션만 조합합니다." : "형식과 사실성을 점검합니다."}</p></div>)}</div>
-        <aside><strong>정보가 부족하면?</strong><span>결과를 크게 바꾸는 정보는 최대 3개까지 질문합니다. 그렇지 않으면 안전한 가정을 밝히거나 <code>{"{{변수}}"}</code>로 남겨 바로 사용할 수 있게 만듭니다.</span></aside>
-      </section>
 
       <section className="practice section" id="practice">
-        <div className="practice-heading"><p className="section-kicker">04 / TRY IT YOURSELF</p><h2>이제, 당신의 <em>조건을 넣어보세요.</em></h2><p>입력값이 비어 있으면 변수로 남습니다. 생성된 프롬프트는 <strong>복사하기</strong>를 눌러 ChatGPT·Codex·Claude 등 원하는 도구에 바로 붙여 넣을 수 있습니다.</p></div>
+        <div className="practice-heading"><p className="section-kicker">03 / TRY IT YOURSELF</p><h2>이제, 당신의 <em>조건을 넣어보세요.</em></h2><p>입력값이 비어 있으면 변수로 남습니다. 생성된 프롬프트는 <strong>복사하기</strong>를 눌러 ChatGPT·Codex·Claude 등 원하는 도구에 바로 붙여 넣을 수 있습니다.</p></div>
         <div className="workbench" id="workbench">
           <div className="form-panel">
             <div className="mode-choices" role="group" aria-label="상황">{(Object.keys(modes) as Mode[]).map((key) => <button type="button" key={key} className={practiceMode === key ? "active" : ""} onClick={() => selectPracticeMode(key)}>{modes[key].label}</button>)}</div>
