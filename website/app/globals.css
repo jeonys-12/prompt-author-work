@@ -185,6 +185,20 @@ h1 em, h2 em { color: var(--accent-light); font-style: normal; }
 .example { padding-top: 12px; border-top: 1px solid var(--line-dark); }
 .example .label { margin-bottom: 8px; }
 .example blockquote { margin: 0; color: #d9effc; font-size: 14px; line-height: 1.6; }
+.example-start {
+  margin-top: 14px;
+  padding: 9px 13px;
+  border: 1px solid var(--accent-light);
+  background: transparent;
+  color: var(--accent-light);
+  font: 600 12px var(--font-geist-sans), sans-serif;
+  cursor: pointer;
+  transition: background 160ms ease, color 160ms ease;
+}
+.example-start:hover,
+.example-start:focus-visible { background: var(--accent-light); color: var(--deep); }
+.example-start span { margin-left: 6px; }
+
 
 .flow { margin-top: 18px; display: grid; grid-template-columns: repeat(4, 1fr); border-block: 1px solid var(--line); }
 .flow div { min-height: 100px; padding: 13px 16px; border-right: 1px solid var(--line); }
