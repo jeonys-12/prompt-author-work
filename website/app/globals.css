@@ -145,7 +145,9 @@ h1 em, h2 em { color: var(--accent-light); font-style: normal; }
   letter-spacing: -0.03em;
 }
 .path-card p:not(.mono) { max-width: 560px; margin-bottom: 12px; opacity: 0.76; font-size: 13px; }
-.path-card a { width: fit-content; margin-top: auto; color: inherit; font-size: 12px; }
+.path-actions { margin-top: auto; display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+.path-card a { width: fit-content; color: inherit; font-size: 12px; }
+.path-card > a { margin-top: auto; }
 .path-card a span { margin-left: 16px; }
 
 .mode-section { background: var(--deep); color: var(--white); }
