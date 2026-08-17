@@ -101,6 +101,8 @@ const modes: Record<Mode, ModeConfig> = {
 
 const modeKeys = Object.keys(modes) as Mode[];
 const repositoryUrl = "https://github.com/jeonys-12/prompt-author-work";
+const copyFeedbackDuration = 1800;
+const maxDesignFileBytes = 256 * 1024;
 
 export default function Home() {
   const [guideMode, setGuideMode] = useState<Mode>("casual");
@@ -113,8 +115,10 @@ export default function Home() {
   const [referencePrompt, setReferencePrompt] = useState("");
   const [designBrief, setDesignBrief] = useState("");
   const [needsVerification, setNeedsVerification] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "error">("idle");
+  const [designFileError, setDesignFileError] = useState("");
   const designReadId = useRef(0);
+  const copyResetTimer = useRef<number | null>(null);
 
   useEffect(() => {
     function cancelSmoothScroll() {
@@ -137,6 +141,7 @@ export default function Home() {
       window.removeEventListener("wheel", cancelSmoothScroll);
       window.removeEventListener("touchstart", cancelSmoothScroll);
       window.removeEventListener("keydown", cancelSmoothScrollFromKey);
+      if (copyResetTimer.current !== null) window.clearTimeout(copyResetTimer.current);
     };
   }, []);
 
@@ -163,13 +168,17 @@ export default function Home() {
   }), [practiceMode, practiceSelected.fields, objective, audience, tone, length, format, referencePrompt, designBrief, needsVerification]);
 
   async function copyPrompt() {
+    if (copyResetTimer.current !== null) window.clearTimeout(copyResetTimer.current);
     try {
       await navigator.clipboard.writeText(practicePrompt);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 1800);
+      setCopyStatus("copied");
     } catch {
-      setCopied(false);
+      setCopyStatus("error");
     }
+    copyResetTimer.current = window.setTimeout(() => {
+      setCopyStatus("idle");
+      copyResetTimer.current = null;
+    }, copyFeedbackDuration);
   }
 
   function applyExample(mode: Mode, config: ModeConfig) {
@@ -184,9 +193,12 @@ export default function Home() {
   function resetModeExtras() {
     setReferencePrompt("");
     setDesignBrief("");
+    setDesignFileError("");
     setNeedsVerification(false);
     designReadId.current += 1;
-    setCopied(false);
+    if (copyResetTimer.current !== null) window.clearTimeout(copyResetTimer.current);
+    copyResetTimer.current = null;
+    setCopyStatus("idle");
   }
 
   function loadExample() {
@@ -213,11 +225,23 @@ export default function Home() {
 
   function readDesignFile(file: File | undefined) {
     if (!file) return;
+    if (file.size > maxDesignFileBytes) {
+      designReadId.current += 1;
+      setDesignBrief("");
+      setDesignFileError("design.md는 256KB 이하의 파일만 사용할 수 있습니다.");
+      return;
+    }
+    setDesignFileError("");
     const readId = ++designReadId.current;
     const reader = new FileReader();
     reader.onload = () => {
       if (readId !== designReadId.current) return;
       setDesignBrief(String(reader.result ?? ""));
+    };
+    reader.onerror = () => {
+      if (readId !== designReadId.current) return;
+      setDesignBrief("");
+      setDesignFileError("design.md를 읽지 못했습니다. 파일을 다시 선택해 주세요.");
     };
     reader.readAsText(file);
   }
@@ -280,10 +304,10 @@ export default function Home() {
             {isCasualMode ? <><label>{practiceSelected.fields[2]}<input value={tone} onChange={(e) => setTone(e.target.value)} placeholder={practiceSelected.placeholders[2]} /></label><label>{practiceSelected.fields[3]}<input value={length} onChange={(e) => setLength(e.target.value)} placeholder={practiceSelected.placeholders[3]} /></label><label>{practiceSelected.fields[4]}<input value={format} onChange={(e) => setFormat(e.target.value)} placeholder={practiceSelected.placeholders[4]} /></label></> : <label>{practiceSelected.fields[2]}<input value={format} onChange={(e) => setFormat(e.target.value)} placeholder={practiceSelected.placeholders[2]} /></label>}
             {isCasualMode && <label className="verification-option"><input type="checkbox" checked={needsVerification} onChange={(e) => setNeedsVerification(e.target.checked)} />근거·불확실성 검증 포함</label>}
             {isMediaMode && <><p className="reference-help">레퍼런스가 필요하면 <a href="https://youmind.com/ko-KR/gpt-image-2-prompts/explore?categories=profile-avatar" target="_blank" rel="noreferrer">YouMind</a> 또는 <a href="https://prompts3.com/" target="_blank" rel="noreferrer">Prompts3</a>에서 마음에 드는 프롬프트를 찾아 복사해 붙여 넣으세요.</p><label>레퍼런스 프롬프트<textarea value={referencePrompt} onChange={(e) => setReferencePrompt(e.target.value)} placeholder="참고할 프롬프트를 붙여 넣으세요." rows={4} /></label>{omittedReferenceFields.length > 0 && <p className="file-status" role="status">레퍼런스에 {omittedReferenceFields.join(" · ")} 정보가 있어 생성 프롬프트에서 해당 입력을 제외했습니다.</p>}</>}
-            {supportsDesignBrief && <><p className="reference-help"><a href="https://getdesign.md/" target="_blank" rel="noreferrer">getdesign.md</a>에서 디자인 기준을 찾거나, 가진 design.md 파일을 선택하세요. 내용은 이 브라우저에서만 읽습니다.</p><label>design.md 업로드<input type="file" accept=".md,text/markdown,text/plain" onChange={(e) => readDesignFile(e.target.files?.[0])} /></label>{designBrief && <p className="file-status">design.md 디자인 설명을 {practiceMode === "app" ? "앱 UI 설계에" : "프롬프트에"} 반영합니다.</p>}</>}
+            {supportsDesignBrief && <><p className="reference-help"><a href="https://getdesign.md/" target="_blank" rel="noreferrer">getdesign.md</a>에서 디자인 기준을 찾거나, 가진 design.md 파일을 선택하세요. 내용은 이 브라우저에서만 읽습니다.</p><label>design.md 업로드<input type="file" accept=".md,text/markdown,text/plain" onChange={(e) => readDesignFile(e.target.files?.[0])} /></label>{designFileError ? <p className="file-status" role="alert">{designFileError}</p> : designBrief && <p className="file-status">design.md 디자인 설명을 {practiceMode === "app" ? "앱 UI 설계에" : "프롬프트에"} 반영합니다.</p>}</>}
             <button className="ghost" onClick={loadExample}>예시 조건 채우기 <span>↗</span></button>
           </div>
-          <div className="output-panel"><div className="output-top"><span className="mono">YOUR PROMPT</span><button onClick={copyPrompt}>{copied ? "복사됨!" : "복사하기"}</button></div><pre>{practicePrompt}</pre><p className="output-note">{practiceMode === "goal" && practicePrompt.length > 4000 ? "Codex objective와 Claude Code condition은 4,000자 이내로 줄여야 합니다." : objective && audience && format && (practiceMode !== "casual" || (tone && length)) ? "조건이 모두 채워졌습니다. 이 프롬프트를 사용해 보세요." : "빈 조건은 {{변수}}로 남겨 두었습니다."}</p></div>
+          <div className="output-panel"><div className="output-top"><span className="mono">YOUR PROMPT</span><button onClick={copyPrompt} aria-live="polite">{copyStatus === "copied" ? "복사됨!" : copyStatus === "error" ? "복사 실패" : "복사하기"}</button></div><pre>{practicePrompt}</pre><p className="output-note">{practiceMode === "goal" && practicePrompt.length > 4000 ? "Codex objective와 Claude Code condition은 4,000자 이내로 줄여야 합니다." : objective && audience && format && (practiceMode !== "casual" || (tone && length)) ? "조건이 모두 채워졌습니다. 이 프롬프트를 사용해 보세요." : "빈 조건은 {{변수}}로 남겨 두었습니다."}</p></div>
         </div>
       </section>
 
