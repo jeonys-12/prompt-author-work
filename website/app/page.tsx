@@ -213,7 +213,7 @@ export default function Home() {
       </section>
 
       <section className="paths section" id="paths">
-        <div className="paths-heading"><p className="section-kicker">01 / CHOOSE YOUR PATH</p><h2>원하는 방식으로 <em>바로 시작</em>하세요.</h2><p>지금 한 번의 프롬프트가 필요하면 웹에서 바로 생성하고, 반복해서 프롬프트를 만들면 스킬을 설치하여 사용하세요.</p></div>
+        <div className="paths-heading"><p className="section-kicker">01 / CHOOSE YOUR PATH</p><h2>원하는 방식으로 <em>바로 시작</em>하세요.</h2><p>지금 한 번의 프롬프트가 필요하면 웹에서 바로 생성하고, 특정 프롬프트를 만드는 상황이 반복되면 스킬을 설치하여 사용하세요.</p></div>
         <div className="path-cards">
           <article className="path-card web-path"><p className="mono">PATH 01</p><h3>웹에서 만들고 바로 붙여넣기</h3><p>조건을 입력해 프롬프트를 생성한 뒤 <strong>복사하기</strong>를 누르고, ChatGPT·Codex·Claude 등 원하는 곳에 붙여넣으세요.</p><a href="#workbench">웹에서 프롬프트 만들기 <span>→</span></a></article>
           <article className="path-card skill-path"><p className="mono">PATH 02</p><h3>스킬을 내려받아 Codex·Claude Code에서 사용하기</h3><p>저장소를 설치한 뒤 Codex에서는 <code>$prompt-author</code>, Claude Code에서는 <code>/prompt-author</code>로 상황에 맞는 프롬프트를 요청할 수 있습니다.</p><a href="https://github.com/seominpapa/prompt-author#설치-방법" target="_blank" rel="noreferrer">스킬 설치 방법 보기 <span>↗</span></a></article>
