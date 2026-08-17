@@ -59,6 +59,10 @@ test("ships the interactive practice tool without starter preview code", async (
 
   assert.match(page, /"use client"/);
   assert.match(page, /navigator\.clipboard\.writeText/);
+  assert.match(page, /copyResetTimer\.current !== null/);
+  assert.match(page, /window\.clearTimeout\(copyResetTimer\.current\)/);
+  assert.match(page, /setCopyStatus\("error"\)/);
+  assert.match(page, /aria-live="polite"/);
   assert.match(page, /const modes/);
   assert.match(page, /values: \["2026년 한국 생성형 AI 시장 조사", "정부·기업 공식 자료를 우선", "출처를 포함한 사실·해석 구분 표"\]/);
   assert.match(page, /placeholders: \["무엇을 조사할까요\?", "어떤 출처를 사용할까요\?", "어떤 형식으로 정리할까요\?"\]/);
@@ -111,6 +115,10 @@ test("ships the interactive practice tool without starter preview code", async (
   assert.match(page, /getdesign\.md/);
   assert.match(page, /YouMind/);
   assert.match(page, /readDesignFile/);
+  assert.match(page, /const maxDesignFileBytes = 256 \* 1024/);
+  assert.match(page, /file\.size > maxDesignFileBytes/);
+  assert.match(page, /reader\.onerror/);
+  assert.match(page, /role="alert"/);
   assert.match(page, /const supportsDesignBrief = practiceMode === "presentation" \|\| practiceMode === "app"/);
   assert.match(page, /buildDesignReference\(designBrief, "앱 UI 설계"\)/);
   assert.match(page, /const \[guideMode, setGuideMode\] = useState<Mode>\("casual"\)/);
