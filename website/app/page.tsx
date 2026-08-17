@@ -5,7 +5,17 @@ import { buildPracticePrompt, detectReferenceCoverage } from "./prompt-builder.j
 
 type Mode = "casual" | "research" | "image" | "video" | "presentation" | "app" | "automation" | "goal" | "eval";
 
-const modes: Record<Mode, { label: string; short: string; rule: string; example: string; fields: string[]; placeholders: string[]; values: string[] }> = {
+type ModeConfig = {
+  label: string;
+  short: string;
+  rule: string;
+  example: string;
+  fields: string[];
+  placeholders: string[];
+  values: string[];
+};
+
+const modes: Record<Mode, ModeConfig> = {
   casual: {
     label: "일반 질문·보고 초안",
     short: "대화 · 초안 · 아이디어",
@@ -89,6 +99,9 @@ const modes: Record<Mode, { label: string; short: string; rule: string; example:
   },
 };
 
+const modeKeys = Object.keys(modes) as Mode[];
+const repositoryUrl = "https://github.com/jeonys-12/prompt-author-work";
+
 export default function Home() {
   const [guideMode, setGuideMode] = useState<Mode>("casual");
   const [practiceMode, setPracticeMode] = useState<Mode>("casual");
@@ -129,8 +142,11 @@ export default function Home() {
 
   const selected = modes[guideMode];
   const practiceSelected = modes[practiceMode];
+  const isCasualMode = practiceMode === "casual";
+  const isMediaMode = practiceMode === "image" || practiceMode === "video";
+  const supportsDesignBrief = practiceMode === "presentation" || practiceMode === "app";
   const referenceCoverage = useMemo(() => detectReferenceCoverage(referencePrompt), [referencePrompt]);
-  const omittedReferenceFields = practiceMode === "image" || practiceMode === "video"
+  const omittedReferenceFields = isMediaMode
     ? [referenceCoverage.visual ? practiceSelected.fields[1] : "", referenceCoverage.format ? practiceSelected.fields[2] : ""].filter(Boolean)
     : [];
   const practicePrompt = useMemo(() => buildPracticePrompt({
@@ -147,31 +163,40 @@ export default function Home() {
   }), [practiceMode, practiceSelected.fields, objective, audience, tone, length, format, referencePrompt, designBrief, needsVerification]);
 
   async function copyPrompt() {
-    await navigator.clipboard.writeText(practicePrompt);
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 1800);
+    try {
+      await navigator.clipboard.writeText(practicePrompt);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1800);
+    } catch {
+      setCopied(false);
+    }
   }
 
-  function loadExample() {
-    setObjective(practiceSelected.values[0]);
-    setAudience(practiceSelected.values[1]);
-    setTone(practiceMode === "casual" ? practiceSelected.values[2] : "");
-    setLength(practiceMode === "casual" ? practiceSelected.values[3] : "");
-    setFormat(practiceSelected.values[practiceMode === "casual" ? 4 : 2]);
+  function applyExample(mode: Mode, config: ModeConfig) {
+    const casual = mode === "casual";
+    setObjective(config.values[0]);
+    setAudience(config.values[1]);
+    setTone(casual ? config.values[2] : "");
+    setLength(casual ? config.values[3] : "");
+    setFormat(config.values[casual ? 4 : 2]);
   }
 
-  function startWithGuideExample() {
-    setPracticeMode(guideMode);
-    setObjective(selected.values[0]);
-    setAudience(selected.values[1]);
-    setTone(guideMode === "casual" ? selected.values[2] : "");
-    setLength(guideMode === "casual" ? selected.values[3] : "");
-    setFormat(selected.values[guideMode === "casual" ? 4 : 2]);
+  function resetModeExtras() {
     setReferencePrompt("");
     setDesignBrief("");
     setNeedsVerification(false);
     designReadId.current += 1;
     setCopied(false);
+  }
+
+  function loadExample() {
+    applyExample(practiceMode, practiceSelected);
+  }
+
+  function startWithGuideExample() {
+    setPracticeMode(guideMode);
+    applyExample(guideMode, selected);
+    resetModeExtras();
     window.requestAnimationFrame(() => document.getElementById("workbench")?.scrollIntoView({ behavior: "smooth", block: "start" }));
   }
 
@@ -183,11 +208,7 @@ export default function Home() {
     setTone("");
     setLength("");
     setFormat("");
-    setReferencePrompt("");
-    setDesignBrief("");
-    setNeedsVerification(false);
-    designReadId.current += 1;
-    setCopied(false);
+    resetModeExtras();
   }
 
   function readDesignFile(file: File | undefined) {
@@ -228,7 +249,7 @@ export default function Home() {
         <div className="paths-heading"><p className="section-kicker">01 / CHOOSE YOUR PATH</p><h2>원하는 방식으로 <em>바로 시작</em>하세요.</h2><p>지금 한 번의 프롬프트가 필요하면 웹에서 바로 생성하고, 특정 프롬프트를 만드는 상황이 반복되면 스킬을 설치하여 사용하세요.</p></div>
         <div className="path-cards">
           <article className="path-card web-path"><p className="mono">PATH 01</p><h3>웹에서 만들고 바로 붙여넣기</h3><p>조건을 입력해 프롬프트를 생성한 뒤 <strong>복사하기</strong>를 누르고, ChatGPT·Codex·Claude 등 원하는 곳에 붙여넣으세요.</p><a href="#workbench">웹에서 프롬프트 만들기 <span>→</span></a></article>
-          <article className="path-card skill-path"><p className="mono">PATH 02</p><h3>스킬을 내려받아 Codex·Claude Code에서 사용하기</h3><p>저장소를 설치한 뒤 Codex에서는 <code>$prompt-author</code>, Claude Code에서는 <code>/prompt-author</code>로 상황에 맞는 프롬프트를 요청할 수 있습니다.</p><a href="https://github.com/seominpapa/prompt-author#설치-방법" target="_blank" rel="noreferrer">스킬 설치 방법 보기 <span>↗</span></a></article>
+          <article className="path-card skill-path"><p className="mono">PATH 02</p><h3>스킬을 내려받아 Codex·Claude Code에서 사용하기</h3><p>저장소를 설치한 뒤 Codex에서는 <code>$prompt-author</code>, Claude Code에서는 <code>/prompt-author</code>로 상황에 맞는 프롬프트를 요청할 수 있습니다.</p><a href={`${repositoryUrl}#설치-방법`} target="_blank" rel="noreferrer">스킬 설치 방법 보기 <span>↗</span></a></article>
         </div>
       </section>
 
@@ -236,7 +257,7 @@ export default function Home() {
         <div className="mode-header"><p className="section-kicker">02 / MODE SELECTOR</p><p>상황을 선택해 원칙과 예시를 확인하세요.</p></div>
         <div className="mode-layout">
           <div className="mode-list" role="tablist" aria-label="프롬프트 상황">
-            {(Object.keys(modes) as Mode[]).map((key, i) => <button type="button" key={key} className={guideMode === key ? "active" : ""} onClick={() => setGuideMode(key)} role="tab" aria-selected={guideMode === key}><span>{String(i + 1).padStart(2, "0")}</span><strong>{modes[key].label}</strong><small>{modes[key].short}</small><i>↗</i></button>)}
+            {modeKeys.map((key, i) => <button type="button" key={key} className={guideMode === key ? "active" : ""} onClick={() => setGuideMode(key)} role="tab" aria-selected={guideMode === key}><span>{String(i + 1).padStart(2, "0")}</span><strong>{modes[key].label}</strong><small>{modes[key].short}</small><i>↗</i></button>)}
           </div>
           <article className="mode-detail">
             <p className="detail-tag">{selected.label.toUpperCase()} MODE</p>
@@ -253,20 +274,20 @@ export default function Home() {
         <div className="practice-heading"><p className="section-kicker">03 / TRY IT YOURSELF</p><h2>이제, 당신의 <em>조건을 넣어보세요.</em></h2><p>입력값이 비어 있으면 변수로 남습니다. 생성된 프롬프트는 <strong>복사하기</strong>를 눌러 ChatGPT·Codex·Claude 등 원하는 도구에 바로 붙여 넣을 수 있습니다.</p></div>
         <div className="workbench" id="workbench">
           <div className="form-panel">
-            <div className="mode-choices" role="group" aria-label="상황">{(Object.keys(modes) as Mode[]).map((key) => <button type="button" key={key} className={practiceMode === key ? "active" : ""} onClick={() => selectPracticeMode(key)}>{modes[key].label}</button>)}</div>
+            <div className="mode-choices" role="group" aria-label="상황">{modeKeys.map((key) => <button type="button" key={key} className={practiceMode === key ? "active" : ""} onClick={() => selectPracticeMode(key)}>{modes[key].label}</button>)}</div>
             <label>{practiceSelected.fields[0]}<textarea value={objective} onChange={(e) => setObjective(e.target.value)} placeholder={practiceSelected.placeholders[0]} rows={3} /></label>
             <label>{practiceSelected.fields[1]}<input value={audience} onChange={(e) => setAudience(e.target.value)} placeholder={practiceSelected.placeholders[1]} /></label>
-            {practiceMode === "casual" ? <><label>{practiceSelected.fields[2]}<input value={tone} onChange={(e) => setTone(e.target.value)} placeholder={practiceSelected.placeholders[2]} /></label><label>{practiceSelected.fields[3]}<input value={length} onChange={(e) => setLength(e.target.value)} placeholder={practiceSelected.placeholders[3]} /></label><label>{practiceSelected.fields[4]}<input value={format} onChange={(e) => setFormat(e.target.value)} placeholder={practiceSelected.placeholders[4]} /></label></> : <label>{practiceSelected.fields[2]}<input value={format} onChange={(e) => setFormat(e.target.value)} placeholder={practiceSelected.placeholders[2]} /></label>}
-            {practiceMode === "casual" && <label className="verification-option"><input type="checkbox" checked={needsVerification} onChange={(e) => setNeedsVerification(e.target.checked)} />근거·불확실성 검증 포함</label>}
-            {(practiceMode === "image" || practiceMode === "video") && <><p className="reference-help">레퍼런스가 필요하면 <a href="https://youmind.com/ko-KR/gpt-image-2-prompts/explore?categories=profile-avatar" target="_blank" rel="noreferrer">YouMind</a> 또는 <a href="https://prompts3.com/" target="_blank" rel="noreferrer">Prompts3</a>에서 마음에 드는 프롬프트를 찾아 복사해 붙여 넣으세요.</p><label>레퍼런스 프롬프트<textarea value={referencePrompt} onChange={(e) => setReferencePrompt(e.target.value)} placeholder="참고할 프롬프트를 붙여 넣으세요." rows={4} /></label>{omittedReferenceFields.length > 0 && <p className="file-status" role="status">레퍼런스에 {omittedReferenceFields.join(" · ")} 정보가 있어 생성 프롬프트에서 해당 입력을 제외했습니다.</p>}</>}
-            {(practiceMode === "presentation" || practiceMode === "app") && <><p className="reference-help"><a href="https://getdesign.md/" target="_blank" rel="noreferrer">getdesign.md</a>에서 디자인 기준을 찾거나, 가진 design.md 파일을 선택하세요. 내용은 이 브라우저에서만 읽습니다.</p><label>design.md 업로드<input type="file" accept=".md,text/markdown,text/plain" onChange={(e) => readDesignFile(e.target.files?.[0])} /></label>{designBrief && <p className="file-status">design.md 디자인 설명을 {practiceMode === "app" ? "앱 UI 설계에" : "프롬프트에"} 반영합니다.</p>}</>}
+            {isCasualMode ? <><label>{practiceSelected.fields[2]}<input value={tone} onChange={(e) => setTone(e.target.value)} placeholder={practiceSelected.placeholders[2]} /></label><label>{practiceSelected.fields[3]}<input value={length} onChange={(e) => setLength(e.target.value)} placeholder={practiceSelected.placeholders[3]} /></label><label>{practiceSelected.fields[4]}<input value={format} onChange={(e) => setFormat(e.target.value)} placeholder={practiceSelected.placeholders[4]} /></label></> : <label>{practiceSelected.fields[2]}<input value={format} onChange={(e) => setFormat(e.target.value)} placeholder={practiceSelected.placeholders[2]} /></label>}
+            {isCasualMode && <label className="verification-option"><input type="checkbox" checked={needsVerification} onChange={(e) => setNeedsVerification(e.target.checked)} />근거·불확실성 검증 포함</label>}
+            {isMediaMode && <><p className="reference-help">레퍼런스가 필요하면 <a href="https://youmind.com/ko-KR/gpt-image-2-prompts/explore?categories=profile-avatar" target="_blank" rel="noreferrer">YouMind</a> 또는 <a href="https://prompts3.com/" target="_blank" rel="noreferrer">Prompts3</a>에서 마음에 드는 프롬프트를 찾아 복사해 붙여 넣으세요.</p><label>레퍼런스 프롬프트<textarea value={referencePrompt} onChange={(e) => setReferencePrompt(e.target.value)} placeholder="참고할 프롬프트를 붙여 넣으세요." rows={4} /></label>{omittedReferenceFields.length > 0 && <p className="file-status" role="status">레퍼런스에 {omittedReferenceFields.join(" · ")} 정보가 있어 생성 프롬프트에서 해당 입력을 제외했습니다.</p>}</>}
+            {supportsDesignBrief && <><p className="reference-help"><a href="https://getdesign.md/" target="_blank" rel="noreferrer">getdesign.md</a>에서 디자인 기준을 찾거나, 가진 design.md 파일을 선택하세요. 내용은 이 브라우저에서만 읽습니다.</p><label>design.md 업로드<input type="file" accept=".md,text/markdown,text/plain" onChange={(e) => readDesignFile(e.target.files?.[0])} /></label>{designBrief && <p className="file-status">design.md 디자인 설명을 {practiceMode === "app" ? "앱 UI 설계에" : "프롬프트에"} 반영합니다.</p>}</>}
             <button className="ghost" onClick={loadExample}>예시 조건 채우기 <span>↗</span></button>
           </div>
           <div className="output-panel"><div className="output-top"><span className="mono">YOUR PROMPT</span><button onClick={copyPrompt}>{copied ? "복사됨!" : "복사하기"}</button></div><pre>{practicePrompt}</pre><p className="output-note">{practiceMode === "goal" && practicePrompt.length > 4000 ? "Codex objective와 Claude Code condition은 4,000자 이내로 줄여야 합니다." : objective && audience && format && (practiceMode !== "casual" || (tone && length)) ? "조건이 모두 채워졌습니다. 이 프롬프트를 사용해 보세요." : "빈 조건은 {{변수}}로 남겨 두었습니다."}</p></div>
         </div>
       </section>
 
-      <footer><a className="brand" href="#top">prompt<span>author</span></a><p>Write less. Specify better.</p><a href="https://github.com/seominpapa/prompt-author" target="_blank" rel="noreferrer">GitHub ↗</a></footer>
+      <footer><a className="brand" href="#top">prompt<span>author</span></a><p>Write less. Specify better.</p><a href={repositoryUrl} target="_blank" rel="noreferrer">GitHub ↗</a></footer>
     </main>
   );
 }
